@@ -72,6 +72,7 @@ class UpdateWindow(FloatLayout):
 		self.backButton.bind(on_press=self.update_backto)
 		self.add_widget(self.backButton)
 
+	# Main frame to choose exercise to update.
 	def choose_exercise(self):
 		self.button_dict = {}
 
