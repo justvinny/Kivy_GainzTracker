@@ -6,7 +6,6 @@ from datetime import date
 
 date_pattern = re.compile(r'(\d\d)-(\d\d)-(\d\d\d\d)', )
 search = date_pattern.search("This is 09-06-2020")
-print(search.group(3))
 
 exercises = [
 			'DB_Bench_Press',
@@ -53,14 +52,14 @@ class ConnectDatabase:
 
 		self.connect()
 
-		self.c.execute(f'''INSERT INTO {exercise} (Date, Weight, Reps1,
+		self.c.execute(f'''INSERT INTO {exercise} (Date, Weight, Sets, Reps1,
 				Reps2, Reps3, Reps4, Reps5, Reps6, Reps7, Reps8, Reps9,
-				Reps10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
-				)
+				Reps10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
+				("19-2-2020", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
 
+		self.con.commit()
 
 		self.disconnect()
-		pass
 
 	def get_tables(self):
 		'''
@@ -77,10 +76,11 @@ class ConnectDatabase:
 
 		reader = self.c.fetchall()
 
+		# Get all listed tables in database.
 		for each in reader:
 			table_list.append(each[0])
-			print(each[0])
 
+		# Replace underscores with spaces for our UI output.
 		for each in table_list:
 			split_list = each.split('_')
 			join_list =  ' '.join(split_list)
@@ -88,7 +88,7 @@ class ConnectDatabase:
 
 		self.disconnect()
 
-		return table_list2
+		return table_list, table_list2
 
 	def get_latest(self, exercise):
 		'''
@@ -98,24 +98,26 @@ class ConnectDatabase:
 		'''
 		self.connect()
 
+		# Replace spaces in exercise with underscores.
 		split_list = exercise.split(" ")
 		join_list = '_'.join(split_list)
 
 		self.c.execute(f'SELECT * FROM "{join_list}"')
-		reader = self.c.fetchall()
-
-		latest_date = []
 		
-		for each in reader:
-			latest_date = each
-
+		# Fetch everything from selected table.
+		reader = self.c.fetchall()
+		# Fetch the last/latest entry in table.
+		latest_date = reader[-1]
 
 		self.disconnect()
+
 		return latest_date
+		
 
 if __name__ == '__main__':
 	my_db = ConnectDatabase()
-	my_db.get_latest('DB Bench Press')
+	print(my_db.get_all_exercises())
+
 
 
 
