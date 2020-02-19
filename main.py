@@ -20,10 +20,6 @@ from sqlite_funcs import *
 HEADER_FONT_SIZE = 40
 BUTTON_FONT_SIZE = 18
 
-# Connect to our database.
-def read_from_db():
-	pass
-
 
 # Main Menu Screen.
 class MainMenu(FloatLayout):
@@ -130,9 +126,10 @@ class UpdateStats(FloatLayout):
 		self.u_popup_scroll.add_widget(self.u_popup_layout)
 
 		# Create buttons for popup layout. 
-		# Placeholder. Code needs to be changed for SQLite3.
+		# Get list of exercises from database.
 		self.exercise_list = db_con.get_tables()
-		for each in self.exercise_list:
+		# Index 1 of list contains exercises with spaces in between words. 
+		for each in self.exercise_list[1]:
 			button = Button(text=each, size_hint_y=None, height=80)
 			button.bind(on_press=lambda event, exer = each: self.u_select_call(event, exer))
 			self.u_popup_layout.add_widget(button)
@@ -267,18 +264,18 @@ class UpdateStats(FloatLayout):
 		self.input_reps10.text = ""
 
 		# Insert stats from database into text input.
-		self.input_weight.text = str(latest_stats[0])
-		self.input_sets.text = str(latest_stats[1])
-		self.input_reps1.text = str(latest_stats[2])
-		self.input_reps2.text = str(latest_stats[3])
-		self.input_reps3.text = str(latest_stats[4])
-		self.input_reps4.text = str(latest_stats[5])
-		self.input_reps5.text = str(latest_stats[6])
-		self.input_reps6.text = str(latest_stats[7])
-		self.input_reps7.text = str(latest_stats[8])
-		self.input_reps8.text = str(latest_stats[9])
-		self.input_reps9.text = str(latest_stats[10])
-		self.input_reps10.text = str(latest_stats[11])
+		self.input_weight.text = str(latest_stats[1])
+		self.input_sets.text = str(latest_stats[2])
+		self.input_reps1.text = str(latest_stats[3])
+		self.input_reps2.text = str(latest_stats[4])
+		self.input_reps3.text = str(latest_stats[5])
+		self.input_reps4.text = str(latest_stats[6])
+		self.input_reps5.text = str(latest_stats[7])
+		self.input_reps6.text = str(latest_stats[8])
+		self.input_reps7.text = str(latest_stats[9])
+		self.input_reps8.text = str(latest_stats[10])
+		self.input_reps9.text = str(latest_stats[11])
+		self.input_reps10.text = str(latest_stats[12])
 
 		# Close the popup upon button click.
 		self.u_popup.dismiss()
@@ -294,9 +291,48 @@ class CurrentStats(FloatLayout):
 	def __init__(self, **kwargs):
 		super().__init__(**kwargs)
 
+		self.c_top_widgets()
+		self.c_mid_widgets()
 		self.c_bot_widgets()
 
+		self.add_widget(self.c_top_layout)
+		self.add_widget(self.c_mid_scroll)
 		self.add_widget(self.c_bot_layout)
+
+	# Top Layout Widgets. 
+	def c_top_widgets(self):
+		# Define grid layout to contain our widgets. 
+		self.c_top_layout = GridLayout(size_hint_x=1, size_hint_y=.1,
+				pos_hint={'y':.9})
+		self.c_top_layout.cols = 1
+
+		# Define header Current Stats
+		self.c_label_header = Label(text='Current Stats', 
+			font_size=HEADER_FONT_SIZE, bold=True)
+
+		# Place widget to layout.
+		self.c_top_layout.add_widget(self.c_label_header)
+
+	# Mid Layout Widgets.
+	def c_mid_widgets(self):
+		# Define grid layout to contain our widgets. 
+		self.c_mid_layout = GridLayout(size_hint_y=None)
+		self.c_mid_layout.cols = 1
+		self.c_mid_layout.bind(
+				minimum_height=self.c_mid_layout.setter('height'))
+
+		# Get list of exercises from database.
+		exercise_list = db_con.get_tables()
+
+		for exercise in exercise_list[1]:
+			temp_layout =  FloatLayout(size_hint_y=None, height=200)
+			temp_label = Label(text=exercise, size_hint_y=None, height=80)
+			temp_layout.add_widget(temp_label)
+			self.c_mid_layout.add_widget(temp_layout) 
+
+		# Define scroll layout.
+		self.c_mid_scroll = ScrollView(size_hint=(1,.8), pos_hint={'y':.1})
+		self.c_mid_scroll.add_widget(self.c_mid_layout)
 
 	# Bottom Layout Widgets.
 	def c_bot_widgets(self):
