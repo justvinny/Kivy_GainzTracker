@@ -1,11 +1,20 @@
 # kivygainztracker
 
-**Author: JustVinny **
-
+**Author: JustVinny**
 
 GainZ Tracker is a simple GUI made with Python and the Kivy framework optimised for android devices.
 
 This provides you with an easy way to track your lifting progress in the gym in between your sets. 
+
+**Screenshots**
+
+![Screens](https://github.com/justvinny/Kivy_GainzTracker/blob/master/Screenshots/Main%20Screen.JPG)
+
+![Screens](https://github.com/justvinny/Kivy_GainzTracker/blob/master/Screenshots/Update%20Stats.JPG)
+
+![Screens](https://github.com/justvinny/Kivy_GainzTracker/blob/master/Screenshots/Select%20Exercise.JPG)
+
+![Screens](https://github.com/justvinny/Kivy_GainzTracker/blob/master/Screenshots/Current%20Stats.JPG)
 
 
 **Current features:**
